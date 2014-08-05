@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Calculadora Básica</string>
+    <string name="msg_div0">Divisão por zero!</string>
+    <string name="msg_invop">Operação inválida!</string>
+    <string name="action_settings">Settings</string>
+    <string name="funcao_numero">numeroClicado</string>
+    <string name="funcao_operador">operadorClicado</string>
+    <string name="funcao_cancela">cancelaOperacao</string>
+
+</resources>

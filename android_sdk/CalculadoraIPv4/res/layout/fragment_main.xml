@@ -1,0 +1,309 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="br.edu.utfpr.ct.dainf.calculadoraipv4.MainActivity$PlaceholderFragment" >
+
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Endereço IPv4" />
+            
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_span="2" >
+        
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:inputType="number"
+            android:text="10" />
+		
+		<TextView
+		    android:id="@+id/textView2"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="bottom|center"
+		    android:text="." />
+		
+		<EditText
+		    android:id="@+id/editText2"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:inputType="number"
+		    android:text="0"
+		    android:layout_weight="1" />
+		
+		<TextView
+		    android:id="@+id/textView3"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="bottom|center"
+		    android:text="." />
+		
+		<EditText
+		    android:id="@+id/editText3"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:inputType="number"
+		    android:text="0"
+		    android:layout_weight="1" />
+		
+		<TextView
+		    android:id="@+id/textView4"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="bottom|center"
+		    android:text="." />
+		
+		<EditText
+		    android:id="@+id/editText4"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:inputType="number"
+		    android:text="1"
+		    android:layout_weight="1" />
+        
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TableRow
+            android:id="@+id/tableRow8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            
+			<TextView
+			    android:id="@+id/textView5"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+		    	android:layout_weight="1" 
+			    android:text="Bits de subrede" />
+    
+			<TextView
+			    android:id="@+id/textView6"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+		    	android:layout_weight="1" 
+			    android:text="Bits de máscara" />
+            
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+			
+			<Spinner
+		        android:id="@+id/spinner1"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		    	android:layout_weight="1" 
+		        tools:listitem="@android:layout/simple_spinner_dropdown_item" />
+			
+			<Spinner
+		        android:id="@+id/spinner2"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		    	android:layout_weight="1" 
+		        tools:listitem="@android:layout/simple_spinner_dropdown_item" />
+			
+        </TableRow>
+    </TableLayout>
+    
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_span="2"
+        android:onClick="calculaSubredes"
+        android:text="Calcular" />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#000000" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="Rede: " />
+
+            <TextView
+                android:id="@+id/tvRede"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:text="10.0.0.0/8 (Classe A)"/>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp" >
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="Máscara\nde subrede: " />
+
+            <TextView
+                android:id="@+id/tvMascara"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:text="255.0.0.0" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp" >
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="Broadcast: " />
+
+            <TextView
+                android:id="@+id/tvBroadcast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:text="10.255.255.255" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp" >
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="Host mín: " />
+
+            <TextView
+                android:id="@+id/tvHostMin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:text="10.0.0.1" />
+            
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp" >
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="Host máx: " />
+
+            <TextView
+                android:id="@+id/tvHostMax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:text="10.255.255.254" />
+            
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp" >
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="Subredes: " />
+
+            <TextView
+                android:id="@+id/tvSubredes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:text="1" />
+            
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp" >
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="Hosts por\nsubrede: "/>
+
+            <TextView
+                android:id="@+id/tvHosts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:text="16777214" />
+            
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

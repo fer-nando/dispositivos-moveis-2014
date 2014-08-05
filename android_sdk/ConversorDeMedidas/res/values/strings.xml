@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Conversor de Medidas</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="converter">Converter:</string>
+    <string name="abrev_km">km</string>
+    <string name="abrev_milhas">milhas</string>
+    <string name="abrev_metros">m</string>
+    <string name="abrev_pes">pés</string>
+    <string name="opt_km_milhas">km     &lt;-&gt; milhas</string>
+    <string name="opt_m_pes"    >metros &lt;-&gt; pés</string>
+
+</resources>

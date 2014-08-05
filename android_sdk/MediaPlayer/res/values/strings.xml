@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Media Player</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_launcher">Media Selector</string>
+    <string name="title_activity_media_player">Media Player</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+</resources>
