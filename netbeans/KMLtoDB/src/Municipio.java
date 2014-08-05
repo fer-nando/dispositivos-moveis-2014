@@ -77,5 +77,16 @@ public class Municipio {
 	public void setAltitude(double altitude) {
 		this.altitude = altitude;
 	}
+
+	@Override
+	public String toString() {
+		return "" + id 
+				+ "; " + cd_geocodmu 
+				+ "; " + nm_municipio 
+				+ "; " + nm_uf 
+				+ "; " + longitude 
+				+ "; " + latitude 
+				+ "; " + altitude;
+	}
 	
 }
