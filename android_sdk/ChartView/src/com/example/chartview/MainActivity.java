@@ -1,17 +1,11 @@
 package com.example.chartview;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class MainActivity extends Activity {
 
-	Timer timer = new Timer();
 	ChartView chart;
 	
 	final double amp = 5;
@@ -50,16 +44,6 @@ public class MainActivity extends Activity {
     	t += ts;
 		//System.out.println("value(" + t + ") = " + newValue);
     	chart.addValue(newValue);
-    }
-    
-    class DataUpdateTask extends TimerTask {
-
-		@Override
-		public void run() {
-			updateChart();
-			chart.invalidate();
-		}
-    	
     }
     
     protected void onStop() {
