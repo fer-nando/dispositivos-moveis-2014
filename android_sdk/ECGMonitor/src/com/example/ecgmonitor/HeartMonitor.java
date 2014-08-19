@@ -1,4 +1,4 @@
-package com.example.android.BluetoothChat;
+package com.example.ecgmonitor;
 
 public class HeartMonitor {
 	
@@ -8,6 +8,8 @@ public class HeartMonitor {
 	public static final int LEAD_UNKNOWN 		= -1;
 	public static final int LEAD_CONNECTED 		= 0;
 	public static final int LEAD_DISCONNECTED 	= 1;
+	public static final int LEAD_RA 			= 0;
+	public static final int LEAD_LA 			= 1;
 	// message status
 	public static final int MESSAGE_OK 			= 0;
 	public static final int MESSAGE_WRONG_CMD 	= 1;
@@ -18,19 +20,18 @@ public class HeartMonitor {
 	private int 	ecgDataEnd 		= 0;
 	private int 	ecgDataSize		= 0;
 	private float[] ecgData 		= new float[BUFFER_SIZE];
-	private int 	leadStatus 		= LEAD_UNKNOWN;
+	private int[] 	leadStatus 		= new int[]{LEAD_DISCONNECTED, LEAD_DISCONNECTED};
 	private int 	heartRate 		= 0;
-	private int 	sampleRate		= 250;
-	private float 	samplePeriod	= 1.0f/sampleRate;
+	private float 	samplePeriod	= 1.0f/250.0f;
 	private float 	ecgScale		= 5.0f/4096.0f;
+	private float 	refreshPeriod	= 1.0f/60.0f;
 	
 	// constructor
 	public HeartMonitor() {};
 	
 	public HeartMonitor(int sampleRate, float ecgScale) {
-		this.sampleRate = sampleRate;
+		this.samplePeriod = sampleRate;
 		this.ecgScale = ecgScale;
-		samplePeriod = 1.0f/sampleRate;
 	}
 	
 	// parse received messages
@@ -46,7 +47,8 @@ public class HeartMonitor {
 				heartRate = Integer.valueOf(fields[1]);
 				break;		
 			case 'A':
-				leadStatus = Integer.valueOf(fields[1]);
+				leadStatus[LEAD_RA] = Integer.valueOf(fields[1]);
+				leadStatus[LEAD_LA] = Integer.valueOf(fields[2]);
 				break;
 			case 'D':
 				synchronized (ecgData) {
@@ -68,11 +70,13 @@ public class HeartMonitor {
 	
 	// return the current ECG data
 	public float readECG() {
-		float data = Float.NaN;
+		float data = 0;
 		synchronized (ecgData) {
 			if(ecgDataSize > 0) {
 				data = ecgData[ecgDataBegin++];
 				ecgDataSize--;
+				if(ecgDataBegin == ecgData.length)
+					ecgDataBegin = 0;
 				if(ecgDataSize == 0) {
 					ecgDataBegin = 0;
 					ecgDataEnd = 0;
@@ -83,17 +87,20 @@ public class HeartMonitor {
 	}
 	
 	// getters
+	public int getDataSize() {
+		return ecgDataSize;
+	}
 	public int getHeartRate() {
 		return heartRate;
 	}
-	public int getLeadStatus() {
-		return leadStatus;
-	}
-	public int getSampleRate() {
-		return sampleRate;
+	public int getLeadStatus(int l) {
+		return leadStatus[l];
 	}
 	public float getSamplePeriod() {
 		return samplePeriod;
+	}
+	public float getRefreshPeriod() {
+		return refreshPeriod;
 	}
 	
 }
