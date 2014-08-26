@@ -53,10 +53,11 @@ public class MainActivity extends Activity {
     private BluetoothService mChatService = null;
     // Heart monitor device
     private HeartMonitor mHeartMonitor = null;
+	private long 	startTime, currentTime;
     
     // GUI
     private ChartView chart;
-    private TextView mTextBluetooth, mTextRA, mTextLA;
+    private TextView mTextBluetooth, mTextRA, mTextLA, mTextHeartRate;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,16 +71,18 @@ public class MainActivity extends Activity {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         
         // Setup heart monitor
-        mHeartMonitor = new HeartMonitor();
+        mHeartMonitor = new HeartMonitor(true);
 
-		viewHandler.postDelayed(updateSamples, (long)(1000*mHeartMonitor.getSamplePeriod()));
-		viewHandler.postDelayed(updateView, (long)(1000*mHeartMonitor.getRefreshPeriod()));
+		//viewHandler.postDelayed(updateSamples, (long)(1000*mHeartMonitor.getSamplePeriod()));
+		startTime = System.currentTimeMillis();
+		viewHandler.postAtTime(updateView, startTime+(long)(mHeartMonitor.getRefreshPeriod()*1000));
         
         // GUI
         chart = (ChartView) findViewById(R.id.chartView1);
         mTextBluetooth = (TextView) findViewById(R.id.tv_bluetooth_state);
         mTextRA = (TextView) findViewById(R.id.tv_RA_state);
         mTextLA = (TextView) findViewById(R.id.tv_LA_state);
+        mTextHeartRate = (TextView) findViewById(R.id.tv_heartrate);
 
         // If the adapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
@@ -87,6 +90,7 @@ public class MainActivity extends Activity {
             finish();
             return;
         }
+        
     }
 
     @Override
@@ -244,7 +248,7 @@ public class MainActivity extends Activity {
                 // User did not enable Bluetooth or an error occurred
                 Log.d(TAG, "BT not enabled");
                 Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
-                finish();
+                //finish();
             }
         }
     }
@@ -301,6 +305,10 @@ public class MainActivity extends Activity {
 			mTextLA.setText(R.string.text_lead_disconnected);
     }
     
+    private final void setHeartRate(int heartRate) {
+    	mTextHeartRate.setText(String.valueOf(heartRate));
+    }
+    
     
     Handler samplesHandler = new Handler();
     Runnable updateSamples = new Runnable(){
@@ -320,10 +328,16 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void run() {
-			chart.invalidate();
+			currentTime = System.currentTimeMillis();
+			int remainingSamples = (int)((currentTime - startTime)/1000.0f/mHeartMonitor.getSamplePeriod());
+			chart.addValues(mHeartMonitor.readECGSamples(remainingSamples));
+			setHeartRate(mHeartMonitor.getHeartRate());
 			setLeadStatus(mHeartMonitor.getLeadStatus(HeartMonitor.LEAD_RA),
 					mHeartMonitor.getLeadStatus(HeartMonitor.LEAD_LA));
-			viewHandler.postDelayed(updateView, (long)(1000.0f*mHeartMonitor.getRefreshPeriod()));
+			//viewHandler.postAtTime(updateView, currentTime+(long)(mHeartMonitor.getRefreshPeriod()*1000));
+			viewHandler.postDelayed(updateView, (long)(mHeartMonitor.getRefreshPeriod()*1000));
+			startTime = currentTime;
+			chart.invalidate();
 		}
     	
     };

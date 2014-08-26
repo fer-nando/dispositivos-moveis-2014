@@ -21,13 +21,18 @@ public class HeartMonitor {
 	private int 	ecgDataSize		= 0;
 	private float[] ecgData 		= new float[BUFFER_SIZE];
 	private int[] 	leadStatus 		= new int[]{LEAD_DISCONNECTED, LEAD_DISCONNECTED};
-	private int 	heartRate 		= 0;
-	private float 	samplePeriod	= 1.0f/250.0f;
-	private float 	ecgScale		= 5.0f/4096.0f;
-	private float 	refreshPeriod	= 1.0f/60.0f;
+	private int 	heartRate 		= 60;
+	private float 	samplePeriod	= 1.0f/240.0f;
+	private float 	ecgScale		= 5.0f/1024.0f;
+	private float 	refreshPeriod	= 1.0f/30.0f;
+	private boolean debug			= false;
 	
 	// constructor
-	public HeartMonitor() {};
+	public HeartMonitor(boolean debug) {
+		this.debug = debug;
+		if(debug)
+			ecgDataSize = ECGSample.data.length;
+	};
 	
 	public HeartMonitor(int sampleRate, float ecgScale) {
 		this.samplePeriod = sampleRate;
@@ -71,19 +76,33 @@ public class HeartMonitor {
 	// return the current ECG data
 	public float readECG() {
 		float data = 0;
-		synchronized (ecgData) {
-			if(ecgDataSize > 0) {
-				data = ecgData[ecgDataBegin++];
-				ecgDataSize--;
-				if(ecgDataBegin == ecgData.length)
-					ecgDataBegin = 0;
-				if(ecgDataSize == 0) {
-					ecgDataBegin = 0;
-					ecgDataEnd = 0;
+		if(!debug) {
+			synchronized (ecgData) {
+				if(ecgDataSize > 0) {
+					data = ecgData[ecgDataBegin++];
+					ecgDataSize--;
+					if(ecgDataBegin == ecgData.length)
+						ecgDataBegin = 0;
+					if(ecgDataSize == 0) {
+						ecgDataBegin = 0;
+						ecgDataEnd = 0;
+					}
 				}
 			}
+		} else {
+			data = (ECGSample.data[ecgDataBegin]-512)*ecgScale;
+			ecgDataBegin++;
+			if(ecgDataBegin == ECGSample.data.length)
+				ecgDataBegin = 0;
 		}
 		return data;
+	}
+	
+	public float[] readECGSamples(int remainingSamples) {
+		float[] samples = new float[remainingSamples];
+		for(int i = 0; i < remainingSamples; i++)
+			samples[i] = readECG();
+		return samples;
 	}
 	
 	// getters

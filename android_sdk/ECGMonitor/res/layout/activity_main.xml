@@ -16,11 +16,11 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/textView1"
+        android:layout_toLeftOf="@+id/tv_heartrate"
         android:layout_toStartOf="@+id/textView1" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/tv_heartrate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -29,15 +29,6 @@
         android:layout_margin="10dp"
         android:text="@string/text_default_heartrate"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView1"
-        android:layout_alignEnd="@+id/textView1"
-        android:layout_below="@+id/textView1"
-        android:text="@string/text_bpm" />
 
     <LinearLayout
         android:id="@+id/LinearLayout1"
@@ -112,5 +103,14 @@
 	            android:text="@string/text_lead_disconnected" />
         </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/textView1"
+        android:layout_alignRight="@+id/tv_heartrate"
+        android:layout_below="@+id/tv_heartrate"
+        android:text="@string/text_bpm" />
 
 </RelativeLayout>

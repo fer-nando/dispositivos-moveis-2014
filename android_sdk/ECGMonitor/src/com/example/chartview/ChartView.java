@@ -13,12 +13,12 @@ public class ChartView extends View {
 	public static final int DATA_LENGHT = 200; 
 	
 	private int dataIndex = 0, lastIndex = 0;
-	private double[] data = new double[DATA_LENGHT];
+	private float[] data = new float[DATA_LENGHT];
 
     RectF mBounds, mBorder;
     Paint pBackground, pLine, pBorder;
     float border_width = 2;
-    double amplitude = 5;
+    float amplitude = 10;
 
 	public ChartView(Context context) {
 		super(context);
@@ -89,15 +89,20 @@ public class ChartView extends View {
         System.out.println("size = (" + w + "," + h + ")");
     }
 
-	public void setAmplitude(double value) {
+	public void setAmplitude(float value) {
 		amplitude = value;
 	}
 	
-	public void addValue(double value) {
+	public void addValue(float value) {
 		lastIndex = dataIndex;
 		data[dataIndex++] = value;
 		if(dataIndex >= DATA_LENGHT)
 			dataIndex = 0;
+	}
+	
+	public void addValues(float[] values) {
+		for(float value : values)
+			addValue(value);
 	}
 
 }
