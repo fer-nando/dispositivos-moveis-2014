@@ -7,28 +7,49 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.ecgmonitor.MainActivity" >
-
-    <com.example.chartview.ChartView
-        android:id="@+id/chartView1"
-        android:layout_width="wrap_content"
+    
+    <LinearLayout
+        android:id="@+id/LinearLayout0"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/LinearLayout1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/tv_heartrate"
-        android:layout_toStartOf="@+id/textView1" />
+        android:layout_marginTop="5dp"
+        android:baselineAligned="false" >
 
-    <TextView
-        android:id="@+id/tv_heartrate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/chartView1"
-        android:layout_margin="10dp"
-        android:text="@string/text_default_heartrate"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+	    <com.example.chartview.ChartView
+	        android:id="@+id/chartView1"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="15" />
+
+	    <LinearLayout
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="2"
+	        android:gravity="center"
+	        android:orientation="vertical" >
+	        	
+		    <TextView
+		        android:id="@+id/tv_heartrate"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_margin="10dp"
+		        android:gravity="start"
+		        android:text="@string/text_default_heartrate"
+		        android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+		    <TextView
+		        android:id="@+id/textView2"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:gravity="end"
+		        android:text="@string/text_bpm" />
+	        
+	    </LinearLayout>
+	    
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/LinearLayout1"
@@ -73,13 +94,13 @@
 	            android:layout_height="wrap_content"
 	            android:layout_gravity="start"
 	            android:text="@string/text_electrode_RA" />
-	
-	        <TextView
-	            android:id="@+id/tv_RA_state"
+
+	        <ImageView
+	            android:id="@+id/imageView1"
 	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_gravity="start"
-	            android:text="@string/text_lead_disconnected" />
+	            android:layout_height="match_parent"
+	            android:src="@drawable/ic_lead_off" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -94,23 +115,23 @@
 	            android:layout_height="wrap_content"
 	            android:layout_gravity="start"
 	            android:text="@string/text_electrode_LA" />
-	
-	        <TextView
-	            android:id="@+id/tv_LA_state"
+
+	        <ImageView
+	            android:id="@+id/imageView2"
 	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_gravity="start"
-	            android:text="@string/text_lead_disconnected" />
+	            android:layout_height="match_parent"
+	            android:src="@drawable/ic_lead_off" />
+
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
+    <!-- <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/textView1"
         android:layout_alignRight="@+id/tv_heartrate"
         android:layout_below="@+id/tv_heartrate"
-        android:text="@string/text_bpm" />
+        android:text="@string/text_bpm" /> -->
 
 </RelativeLayout>
