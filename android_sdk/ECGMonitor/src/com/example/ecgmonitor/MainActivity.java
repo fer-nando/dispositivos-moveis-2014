@@ -1,7 +1,5 @@
 package com.example.ecgmonitor;
 
-import com.example.chartview.ChartView;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -14,12 +12,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.chartview.ChartView;
 
 /**
  * This is the main Activity that displays the current chat session.
@@ -27,7 +24,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
     // Debugging
     private static final String TAG = "HeartMonitor";
-    private static final boolean D = true;
+    private static final boolean D = false;
 
     // Message types sent from the BluetoothChatService Handler
     public static final int MESSAGE_STATE_CHANGE = 1;
@@ -64,6 +61,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         if(D) Log.e(TAG, "+++ ON CREATE +++");
 
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        		WindowManager.LayoutParams.FLAG_FULLSCREEN);
         // Set up the window layout
         setContentView(R.layout.activity_main);
 
@@ -75,7 +75,7 @@ public class MainActivity extends Activity {
 
 		//viewHandler.postDelayed(updateSamples, (long)(1000*mHeartMonitor.getSamplePeriod()));
 		startTime = System.currentTimeMillis();
-		viewHandler.postAtTime(updateView, startTime+(long)(mHeartMonitor.getRefreshPeriod()*1000));
+		viewHandler.postDelayed(updateView, (long)(mHeartMonitor.getRefreshPeriod()*1000));
         
         // GUI
         chart = (ChartView) findViewById(R.id.chartView1);
@@ -329,14 +329,21 @@ public class MainActivity extends Activity {
 		@Override
 		public void run() {
 			currentTime = System.currentTimeMillis();
+			
+			long updatePeriod = (long)(mHeartMonitor.getRefreshPeriod()*1000.0f);
+			long nextUpdate = startTime + 2*updatePeriod;
 			int remainingSamples = (int)((currentTime - startTime)/1000.0f/mHeartMonitor.getSamplePeriod());
+			
 			chart.addValues(mHeartMonitor.readECGSamples(remainingSamples));
 			setHeartRate(mHeartMonitor.getHeartRate());
 			setLeadStatus(mHeartMonitor.getLeadStatus(HeartMonitor.LEAD_RA),
 					mHeartMonitor.getLeadStatus(HeartMonitor.LEAD_LA));
-			//viewHandler.postAtTime(updateView, currentTime+(long)(mHeartMonitor.getRefreshPeriod()*1000));
-			viewHandler.postDelayed(updateView, (long)(mHeartMonitor.getRefreshPeriod()*1000));
+			
+			//viewHandler.postAtTime(updateView, currentTime+updatePeriod);
+			viewHandler.postDelayed(updateView, nextUpdate-currentTime);
+			//viewHandler.postDelayed(updateView, updatePeriod);
 			startTime = currentTime;
+			
 			chart.invalidate();
 		}
     	

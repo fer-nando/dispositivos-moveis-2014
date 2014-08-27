@@ -110,6 +110,8 @@ public class HeartMonitor {
 		return ecgDataSize;
 	}
 	public int getHeartRate() {
+		if(debug && Math.random() > .95)
+			heartRate = (int)(Math.random() * 120);
 		return heartRate;
 	}
 	public int getLeadStatus(int l) {
