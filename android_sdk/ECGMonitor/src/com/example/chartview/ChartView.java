@@ -99,8 +99,9 @@ public class ChartView extends View {
 				}
 				if(++counter == dataLenght/100)
 					counter = 0;
-				
-				canvas.drawLine(ax, ay, bx, by, pLine);
+
+				canvas.drawLine(ax, ay, bx, by, pLine);				
+
 			} else {
 				counter = 0;
 			}

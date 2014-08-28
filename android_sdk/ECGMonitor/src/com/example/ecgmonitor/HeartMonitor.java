@@ -16,21 +16,22 @@ public class HeartMonitor {
 	public static final int MESSAGE_INCOMPLETE 	= 2;
 	
 	// heart monitor variables
-	private int 	ecgDataBegin 	= 0;
-	private int 	ecgDataEnd 		= 0;
-	private int 	ecgDataSize		= 0;
-	private float[] ecgData 		= new float[BUFFER_SIZE];
-	private int[] 	leadStatus 		= new int[]{LEAD_DISCONNECTED, LEAD_DISCONNECTED};
-	private int 	heartRate 		= 60;
-	private float 	samplePeriod	= 1.0f/240.0f;
-	private float 	ecgScale		= 5.0f/1024.0f;
-	private float 	refreshPeriod	= 1.0f/30.0f;
-	private boolean debug			= false;
+	private int 	ecgDataBegin 		= 0;
+	private int 	ecgDataEnd 			= 0;
+	private int 	ecgDataSize			= 0;
+	private float[] ecgData 			= new float[BUFFER_SIZE];
+	private int[] 	leadStatus 			= new int[]{LEAD_DISCONNECTED, LEAD_DISCONNECTED};
+	private int 	heartRate 			= 60;
+	private float 	samplePeriod		= 1.0f/240.0f;
+	private float 	ecgScale			= 5.0f/1024.0f;
+	private float 	refreshPeriod		= 1.0f/30.0f;
+	private boolean leadStatusChanged 	= false;
+	private boolean testMode			= false;
 	
 	// constructor
-	public HeartMonitor(boolean debug) {
-		this.debug = debug;
-		if(debug)
+	public HeartMonitor(boolean test) {
+		testMode = test;
+		if(test)
 			ecgDataSize = ECGSample.data.length;
 	};
 	
@@ -54,6 +55,7 @@ public class HeartMonitor {
 			case 'A':
 				leadStatus[LEAD_RA] = Integer.valueOf(fields[1]);
 				leadStatus[LEAD_LA] = Integer.valueOf(fields[2]);
+				leadStatusChanged = true;
 				break;
 			case 'D':
 				synchronized (ecgData) {
@@ -76,7 +78,7 @@ public class HeartMonitor {
 	// return the current ECG data
 	public float readECG() {
 		float data = 0;
-		if(!debug) {
+		if(!testMode) {
 			synchronized (ecgData) {
 				if(ecgDataSize > 0) {
 					data = ecgData[ecgDataBegin++];
@@ -110,9 +112,33 @@ public class HeartMonitor {
 		return ecgDataSize;
 	}
 	public int getHeartRate() {
-		if(debug && Math.random() > .95)
+		if(testMode && Math.random() > .99)
 			heartRate = (int)(Math.random() * 120);
 		return heartRate;
+	}
+	public boolean getLeadStatusChanged() {
+		if(testMode && Math.random() > .99) {
+			double random = Math.random();
+			leadStatusChanged = true;			
+			if(random > .66) {
+				leadStatus[0] = (leadStatus[0] == LEAD_CONNECTED) ? 
+									LEAD_DISCONNECTED : LEAD_CONNECTED ;
+				leadStatus[1] = (leadStatus[1] == LEAD_CONNECTED) ? 
+						LEAD_DISCONNECTED : LEAD_CONNECTED ;
+			} else if(random > .33) {
+				leadStatus[0] = (leadStatus[0] == LEAD_CONNECTED) ? 
+									LEAD_DISCONNECTED : LEAD_CONNECTED ;
+			} else {
+				leadStatus[1] = (leadStatus[1] == LEAD_CONNECTED) ? 
+						LEAD_DISCONNECTED : LEAD_CONNECTED ;				
+			}
+		}
+		if(leadStatusChanged) {
+			leadStatusChanged = false;
+			return true;
+		} else {
+			return false;
+		}
 	}
 	public int getLeadStatus(int l) {
 		return leadStatus[l];
@@ -122,6 +148,22 @@ public class HeartMonitor {
 	}
 	public float getRefreshPeriod() {
 		return refreshPeriod;
+	}
+	public boolean getTestMode() {
+		return testMode;
+	}	
+	public void setTestMode(boolean test) {
+		testMode = test;
+		if(test) {
+			ecgDataSize = ECGSample.data.length;
+			ecgDataBegin = 0;
+		} else {
+			ecgDataBegin = 0;
+			ecgDataEnd = 0;
+			ecgDataSize = 0;
+			leadStatus[0] = LEAD_DISCONNECTED;
+			leadStatus[1] = LEAD_DISCONNECTED;
+		}
 	}
 	
 }

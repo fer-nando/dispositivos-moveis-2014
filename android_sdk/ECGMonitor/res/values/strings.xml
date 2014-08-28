@@ -13,12 +13,16 @@
     <string name="text_electrode_LA">LA:\ </string>
     <string name="text_lead_connected">OK</string>
     <string name="text_lead_disconnected">falha</string>
-    <string name="text_connected">conectado</string>
+    <string name="text_connected">desconectado</string>
     <string name="text_disconnected">desconectado</string>
+    <string name="text_disconnecteds">desconectados</string>
+    <string name="text_electrodes">Eletrodos</string>
+    <string name="text_electrode">Eletrodo</string>
+    <string name="text_and">e</string>
     
     <!--  BluetoothChat -->
     <string name="not_connected">Você não está conectado com um dispositivo.</string>
-    <string name="bt_not_enabled_leaving">Bluetooth não está habilitado. Fechando ECG Monitor.</string>
+    <string name="bt_not_enabled_leaving">Bluetooth não está habilitado.</string>
     <string name="title_connecting">conectando...</string>
     <string name="title_connected_to">conectado a <xliff:g id="device_name">%1$s</xliff:g></string>
     <string name="title_not_connected">não conectado</string>
@@ -36,5 +40,6 @@
     <string name="secure_connect">Conectar - Seguro</string>
     <string name="insecure_connect">Conectar - Inseguro</string>
     <string name="discoverable">Tornar visível</string>
+    <string name="test_mode">Modo de teste</string>
 
 </resources>

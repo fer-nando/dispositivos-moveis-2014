@@ -26,4 +26,8 @@
           android:icon="@android:drawable/ic_menu_mylocation"
           android:title="@string/discoverable"
           android:showAsAction="collapseActionView" />
+    <item android:id="@+id/test_mode"
+          android:icon="@android:drawable/ic_menu_preferences"
+          android:title="@string/test_mode"
+          android:showAsAction="collapseActionView" />
 </menu>
