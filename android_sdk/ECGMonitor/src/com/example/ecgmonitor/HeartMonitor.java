@@ -22,9 +22,9 @@ public class HeartMonitor {
 	private float[] ecgData 			= new float[BUFFER_SIZE];
 	private int[] 	leadStatus 			= new int[]{LEAD_DISCONNECTED, LEAD_DISCONNECTED};
 	private int 	heartRate 			= 60;
-	private float 	samplePeriod		= 1.0f/240.0f;
+	private float 	samplePeriod		= 1.0f/250.0f;
 	private float 	ecgScale			= 5.0f/1024.0f;
-	private float 	refreshPeriod		= 1.0f/30.0f;
+	private float 	refreshPeriod		= 1.0f/20.0f;
 	private boolean leadStatusChanged 	= false;
 	private boolean testMode			= false;
 	
@@ -92,7 +92,7 @@ public class HeartMonitor {
 				}
 			}
 		} else {
-			data = (ECGSample.data[ecgDataBegin]-512)*ecgScale;
+			data = ecgScale * ECGSample.data[ecgDataBegin];
 			ecgDataBegin++;
 			if(ecgDataBegin == ECGSample.data.length)
 				ecgDataBegin = 0;

@@ -385,7 +385,8 @@ public class MainActivity extends Activity {
 			//viewHandler.postAtTime(updateView, currentTime+updatePeriod);
 			viewHandler.postDelayed(updateView, nextUpdate-currentTime);
 			//viewHandler.postDelayed(updateView, updatePeriod);
-			startTime = currentTime;
+			//startTime = currentTime;
+			startTime += updatePeriod;
 			
 			chart.invalidate();
 		}

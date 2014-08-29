@@ -17,7 +17,7 @@ public class ChartView extends View {
 	private static final int border_color = 0xffffffff;
 	
 	private int dataIndex = 0;
-	private int dataLenght = 400; 
+	private int dataLenght = 500; 
 	private float[] data;
 
     RectF mBounds, mBorder;
@@ -67,7 +67,7 @@ public class ChartView extends View {
     protected void onDraw(Canvas canvas) {
 		float scaleY = mBorder.height() / (float)(amplitude);
 		float scaleX = mBorder.width() / (dataLenght);
-		float offsetY = mBorder.centerY();
+		float offsetY = mBorder.bottom;
 		float offsetX = mBorder.left;
 		float ax,bx,ay,by;
 		int counter = 0;
