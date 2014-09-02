@@ -51,7 +51,8 @@ public class MainActivity extends Activity {
     private BluetoothService mChatService = null;
     // Heart monitor device
     private HeartMonitor mHeartMonitor = null;
-	private long 	startTime, currentTime;
+	private long initialTime, startTime, currentTime;
+	private long fetchSamples;
     
     // GUI
     private ChartView chart;
@@ -241,6 +242,8 @@ public class MainActivity extends Activity {
             	mHeartMonitor.setTestMode(false);
                 connectDevice(data, true);
                 startSampling(true);
+            } else {
+            	startSampling(false);
             }
             break;
         case REQUEST_CONNECT_DEVICE_INSECURE:
@@ -249,6 +252,8 @@ public class MainActivity extends Activity {
             	mHeartMonitor.setTestMode(false);
                 connectDevice(data, false);
                 startSampling(true);
+            } else {
+            	startSampling(false);
             }
             break;
         case REQUEST_ENABLE_BT:
@@ -260,6 +265,7 @@ public class MainActivity extends Activity {
                 // User did not enable Bluetooth or an error occurred
                 Log.d(TAG, "BT not enabled");
                 Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
+                startSampling(false);
                 //finish();
             }
         }
@@ -301,6 +307,8 @@ public class MainActivity extends Activity {
             ensureDiscoverable();
             return true;
         case R.id.test_mode:
+            // Stop the Bluetooth chat services
+            if (mChatService != null) mChatService.stop();
         	// Enable/disable test mode
         	boolean testMode = !mHeartMonitor.getTestMode();
         	mHeartMonitor.setTestMode(testMode);
@@ -316,20 +324,16 @@ public class MainActivity extends Activity {
     	String msg = "";
     	
 		if(leadRA == HeartMonitor.LEAD_CONNECTED) {
-			//mTextRA.setText(R.string.text_lead_connected);
 			mLeadRAStatus.setImageResource(R.drawable.ic_lead_on);
 		} else {
-			//mTextRA.setText(R.string.text_lead_disconnected);
 			mLeadRAStatus.setImageResource(R.drawable.ic_lead_off);
 			msg +=  " RA ";
 			leadOff++;
 		}
 		
 		if(leadLA == HeartMonitor.LEAD_CONNECTED) {
-			//mTextLA.setText(R.string.text_lead_connected);
 			mLeadLAStatus.setImageResource(R.drawable.ic_lead_on);
 		} else {
-			//mTextLA.setText(R.string.text_lead_disconnected);
 			mLeadLAStatus.setImageResource(R.drawable.ic_lead_off);
 			if(leadOff > 0)
 				msg += " " + getString(R.string.text_and) + " LA ";
@@ -353,7 +357,8 @@ public class MainActivity extends Activity {
     
     private void startSampling(boolean sampling) {
     	if(sampling) {
-        	startTime = System.currentTimeMillis();
+    		fetchSamples = 0;
+    		initialTime = startTime = System.currentTimeMillis();
     		viewHandler.postDelayed(updateView, (long)(mHeartMonitor.getRefreshPeriod()*1000));
     	} else {
     		viewHandler.removeCallbacks(updateView);
@@ -366,28 +371,36 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void run() {
+			// get current time
 			currentTime = System.currentTimeMillis();
-			
 			long updatePeriod = (long)(mHeartMonitor.getRefreshPeriod()*1000.0f);
-			long nextUpdate = startTime + 2*updatePeriod;
-			int remainingSamples = (int)((currentTime - startTime)/1000.0f/mHeartMonitor.getSamplePeriod());
 			
-			chart.addValues(mHeartMonitor.readECGSamples(remainingSamples));
+			// calculate remaining samples to show
+			long totalSamples = (long)((currentTime - initialTime)/(1000.0*mHeartMonitor.getSamplePeriod()));
+			int remainingSamples = (int)(totalSamples - fetchSamples);
+						
+			//System.out.println("Buf.size=" + mHeartMonitor.getDataSize() + "; rem.samples=" + remainingSamples);
+			
+			// update chart data
+			float[] values = mHeartMonitor.readECGSamples(remainingSamples);
+			chart.addValues(values);
+			fetchSamples += values.length;
+			
+			// update heart rate
 			setHeartRate(mHeartMonitor.getHeartRate());
 
-			
+			// update leads
 			if(mHeartMonitor.getLeadStatusChanged()) {
 				int leadRA = mHeartMonitor.getLeadStatus(HeartMonitor.LEAD_RA);
 				int leadLA = mHeartMonitor.getLeadStatus(HeartMonitor.LEAD_LA);
 				setLeadStatus(leadRA, leadLA);
 			}
 			
-			//viewHandler.postAtTime(updateView, currentTime+updatePeriod);
-			viewHandler.postDelayed(updateView, nextUpdate-currentTime);
-			//viewHandler.postDelayed(updateView, updatePeriod);
-			//startTime = currentTime;
-			startTime += updatePeriod;
+			// reschedule update
+			viewHandler.postDelayed(updateView, updatePeriod);
+			startTime = currentTime;
 			
+			// repaint
 			chart.invalidate();
 		}
     	

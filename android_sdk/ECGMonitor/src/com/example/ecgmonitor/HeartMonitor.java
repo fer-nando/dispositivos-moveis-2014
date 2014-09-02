@@ -100,7 +100,7 @@ public class HeartMonitor {
 		return data;
 	}
 	
-	public float[] readECGSamples(int remainingSamples) {
+	public float[] readECGSamples(int remainingSamples) {			
 		float[] samples = new float[remainingSamples];
 		for(int i = 0; i < remainingSamples; i++)
 			samples[i] = readECG();
